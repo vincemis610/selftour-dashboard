@@ -1,0 +1,5 @@
+---
+deployment:
+  task:
+    - export DEPLOYPATH=/home/selftour/public_html
+    -/bin/rsync -av ./ $DEPLOYPATH
