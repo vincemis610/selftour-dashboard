@@ -1,5 +1,5 @@
-//const URL = 'http://localhost:3000';
-const URL = 'https://selftour.travel/rest-api';
+const URL = 'http://localhost:3000';
+//const URL = 'https://selftour.travel/rest-api';
 
 const storeData = async () => {
     const url = `${URL}/tour-reports`;
@@ -13,23 +13,17 @@ const poblarTablaTours = (data) => {
     console.log(data);
     let html = '';
     data.map( tour => { 
+        let status = (tour.status_tour === 0 || tour.cant_sitios === 0 || tour.images === 0) ? '<strong class="text-danger">Pendiente</strong>' : '<strong class="text-success">Aprovado</strong>';
+        console.log(status)
         html = html + `<tr>
-                <td>
-                    <div class="media">
-                        <img src="${tour.screenshotTour }" width="65" height="50" style="border-radius:50%;padding: 0 10px;" alt="Fail">
-                        <div class="media-body align-self-center">
-                            <div>${ (tour.title.length > 25) ? tour.title.substring(0, 25)+'...' : tour.title }</div>
-                        </div>
-                    </div>
-                </td>
-                <td>${ (tour.status_tour === 1) ? 'SI' : '<strong style="color: red;">NO</strong>' }</td>
+                <td>${ (tour.title.length > 25) ? tour.title.substring(0, 25)+'...' : tour.title }</div></td>
+                <td>${ (tour.status_tour === 1) ? '<icon class="fa fa-check-circle enable"></icon>' : '<icon class="fa fa-ban disable"></icon>' }</td>
                 <td>${tour.tourmaker}</td>
-                <td>${tour.mail}</td>
-                <td>${(tour.cant_sitios === 0 ) ? '<strong style="color:red;">Ninguno</strong>' : tour.cant_sitios }</td>
-                <td>${(tour.images === 0) ? '<strong style="color:red;">Ninguno</strong>' : tour.images}</td>
+                <td>${(tour.cant_sitios === 0 ) ? '<icon class="fa fa-ban disable"></icon>' : tour.cant_sitios }</td>
+                <td>${(tour.images === 0) ? '<icon class="fa fa-exclamation-triangle disable"></icon>' : tour.images}</td>
                 <td>$ ${tour.price} ${tour.moneda}</td>
                 <td>${tour.ventas}</td>
-                <td>${(tour.ventas * tour.price).toFixed(2)}</td>
+                <td>${ status }</td>
             </tr>`
     });
 
