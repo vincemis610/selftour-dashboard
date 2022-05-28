@@ -1,5 +1,5 @@
-const URL = 'http://localhost:3000';
-//const URL = 'https://selftour.travel/rest-api';
+//const URL = 'http://localhost:3000';
+const URL = 'https://selftour.travel/rest-api';
 
 const storeData = async () => {
     const url = `${URL}/tour-reports`;
