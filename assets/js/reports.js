@@ -30,7 +30,7 @@ const poblarTablaTours = (data) => {
                 <td>${(tour.images === 0) ? '<icon class="fa fa-exclamation-triangle disable"></icon>' : tour.images}</td>
                 <td>$ ${tour.price} ${tour.moneda}</td>
                 <td>${tour.ventas}</td>
-                <td>${ tour.warnings.map( w => `<li style="${(w === 'Terminado') ? 'color:green' : 'color:red' }">${w}</li>`).join(' ') }</td>
+                <td>${ tour.warnings.map( w => `<li style="${(w === 'Habilitado') ? 'color:green' : 'color:red' }">${w}</li>`).join(' ') }</td>
             </tr>`
     });
 
