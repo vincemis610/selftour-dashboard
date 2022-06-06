@@ -52,13 +52,13 @@ poblarUI();
 // Habilitar o Deshabilitar Tour
 const enableDisable = (e) => {
     let element = e.target.previousElementSibling;
-    (element.checked) ? disableTour(element) : enableTour(element);
+    console.log('HasAttribute: ',element.hasAttribute('checked'));
+    (element.hasAttribute('checked')) ? disableTour(element) : enableTour(element);
 }
 
 // Deshabilitar Tour
 disableTour = (element) => {
     let parent = element.parentNode.parentNode.parentNode;
-    console.log('ID: ', parent.id)
     Swal.fire({
         title: 'Deshabilitar Tour?',
         text: "El tour no sera visible en la plataforma!",
@@ -75,6 +75,7 @@ disableTour = (element) => {
                 'success'
             )
             element.removeAttribute('checked');
+            element.setAttribute('data-warnings', 'Activar')
             parent.style.backgroundColor = '#fbfcfc';
             parent.lastElementChild.innerHTML = '<li style="color:#e74c3c">Activar</li>';
         }
@@ -84,7 +85,6 @@ disableTour = (element) => {
 // Habilitar Tour
 enableTour = (element) => {
     let parent = element.parentNode.parentNode.parentNode;
-    console.log(parent.id)
     if(element.dataset.warnings === 'Activar'){
         Swal.fire({
             title: 'Habilitar Tour?',
