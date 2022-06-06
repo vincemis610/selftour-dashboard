@@ -1,6 +1,7 @@
 //const URL = 'http://localhost:3000';
 const URL = 'https://selftour.travel/rest-api';
 
+// Almacenar datos
 const storeData = async () => {
     const url = `${URL}/tour-reports`;
     const res = await fetch(url);
@@ -8,7 +9,7 @@ const storeData = async () => {
     localStorage.setItem('reportsTour', JSON.stringify(reports));
 }
 
-// function que pobla la tabla de tours
+// funcion que pobla la tabla de tours
 const poblarTablaTours = (data) => {
     let html = '';
     data.map( tour => { 
@@ -35,24 +36,26 @@ const poblarTablaTours = (data) => {
     document.querySelector('#reporte-tour').innerHTML = html;
 }
 
+// Funcion que ejecuta la poblacion de la pagina y agrega evento
 const poblarUI = async () => {
     await storeData();
     let reportsTour = JSON.parse(localStorage.getItem('reportsTour'));
     poblarTablaTours(reportsTour.report);
 
     const check = document.querySelectorAll('.switch .slider');
-
     check.forEach( val => val.addEventListener('click', event => enableDisable(event) ));
-
 }
 
+// Poblar pagina
 poblarUI();
 
+// Habilitar o Deshabilitar Tour
 const enableDisable = (e) => {
     let element = e.target.previousElementSibling;
     (element.checked) ? disableTour(element) : enableTour(element);
 }
 
+// Deshabilitar Tour
 disableTour = (element) => {
     let parent = element.parentNode.parentNode.parentNode;
     console.log('ID: ', parent.id)
@@ -78,6 +81,7 @@ disableTour = (element) => {
     });
 }
 
+// Habilitar Tour
 enableTour = (element) => {
     let parent = element.parentNode.parentNode.parentNode;
     console.log(parent.id)
