@@ -1,6 +1,6 @@
 .disable {
     font-size:20px;
-    color:red;
+    color:#e74c3c;
   }
   .enable {
     font-size:20px;
@@ -11,8 +11,8 @@
 .switch {
     position: relative;
     display: inline-block;
-    width: 40px;
-    height: 20px;
+    width: 25px;
+    height: 12px;
   }
   
   /* Hide default HTML checkbox */
@@ -38,10 +38,10 @@
   .slider:before {
     position: absolute;
     content: "";
-    height: 12px;
-    width: 12px;
-    left: 4px;
-    bottom: 4px;
+    height: 8px;
+    width: 8px;
+    left: 2px;
+    bottom: 2px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -56,9 +56,9 @@
   }
   
   input:checked + .slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
   }
   
   /* Rounded sliders */
@@ -69,3 +69,13 @@
   .slider.round:before {
     border-radius: 50%;
   } 
+
+  .icon-trash {
+    font-size: 20px;
+    color: #e74c3c;
+    position: absolute;
+    top: -5px;
+    left: 40px;
+    right: 0px;
+    bottom: 0px;
+  }

@@ -14,21 +14,27 @@ const poblarTablaTours = (data) => {
     let html = '';
     data.map( tour => { 
         html = html + `<tr style="${(tour.status_tour === 1) ?'background-color:#eafaf1': 'background-color:#fbfcfc'}" id="tour-${tour.idtour}">
-                <td>${ (tour.title.length > 25) ? tour.title.substring(0, 25)+'...' : tour.title }</div></td>
-                <td>${ (tour.status_tour === 1) ? `<label class="switch">
+                <td style="cursor:pointer; font-weight:bold; font-size: 14px;">
+                    <a style="text-decoration:none; color: #3498db" ${(tour.slug != null) ? `href='https://www.selftour.travel/tour/${tour.slug}'` : ''}>
+                        ${ (tour.title.length > 30) ? tour.title.substring(0, 30)+'...' : tour.title }
+                    </a>
+                </td>
+                <td>${tour.tourmaker}</td>
+                <td style="width:8%;">${(tour.cant_sitios === 0 ) ? '<icon class="fa fa-ban disable"></icon>' : tour.cant_sitios }</td>
+                <td style="width:8%;">${(tour.images === 0) ? '<icon class="fa fa-exclamation-triangle disable"></icon>' : tour.images}</td>
+                <td>$ ${tour.price} ${tour.moneda}</td>
+                <td style="width:8%;">${tour.ventas}</td>
+                <td style="width:8%;">${ (tour.status_tour === 1) ? `<label class="switch">
                                                         <input type="checkbox" checked disabled data-warnings="${tour.warnings.join('|')}">
                                                         <span class="slider round"></span>
+                                                        <icon class="icon-trash fa fa-trash-o"></icon>
                                                     </label>` 
                                                 : `<label class="switch">
                                                         <input type="checkbox" disabled data-warnings="${tour.warnings.join('|')}">
                                                         <span class="slider round"></span>
+                                                        <icon class="icon-trash fa fa-trash-o"></icon>
                                                     </label>`}
                 </td>
-                <td>${tour.tourmaker}</td>
-                <td>${(tour.cant_sitios === 0 ) ? '<icon class="fa fa-ban disable"></icon>' : tour.cant_sitios }</td>
-                <td>${(tour.images === 0) ? '<icon class="fa fa-exclamation-triangle disable"></icon>' : tour.images}</td>
-                <td>$ ${tour.price} ${tour.moneda}</td>
-                <td>${tour.ventas}</td>
                 <td>${ tour.warnings.map( w => `<li style="${(w === 'Ok') ? 'color:#45b39d' : 'color:#e74c3c' }">${w}</li>`).join(' ') }</td>
             </tr>`
     });
@@ -69,15 +75,21 @@ disableTour = (element) => {
         confirmButtonText: 'Deshabilitar'
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire(
-                'Deshabilitado!',
-                'El tour ha sido deshabilitado.',
-                'success'
-            )
-            element.removeAttribute('checked');
-            element.setAttribute('data-warnings', 'Activar')
-            parent.style.backgroundColor = '#fbfcfc';
-            parent.lastElementChild.innerHTML = '<li style="color:#e74c3c">Activar</li>';
+            let  idtour = parent.id.split('-')[1];  
+            fetch(`${URL}/tours/disable/${idtour}`, { method: 'PUT' })
+                .then(response => response.json())
+                .then(result => {
+                    Swal.fire(
+                        'Deshabilitado!',
+                        'El tour ha sido deshabilitado.',
+                        'success'
+                    )
+                    element.removeAttribute('checked');
+                    element.setAttribute('data-warnings', 'Activar')
+                    parent.style.backgroundColor = '#fbfcfc';
+                    parent.lastElementChild.innerHTML = '<li style="color:#e74c3c">Activar</li>';
+                })
+                .catch(error => console.log('error', error))
         }
     });
 }
@@ -96,14 +108,19 @@ enableTour = (element) => {
             confirmButtonText: 'Habilitar'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Habilitado!',
-                    'El tour ha sido habilitado.',
-                    'success'
-                )
-                element.setAttribute('checked', true);
-                parent.lastElementChild.innerHTML = '<li style="color:#45b39d">Ok</li>';
-                parent.style.backgroundColor = '#eafaf1';
+                let  idtour = parent.id.split('-')[1]; 
+                fetch(`${URL}/tours/enable/${idtour}`, { method: 'PUT' })
+                    .then(response => response.json())
+                    .then(result => {
+                        Swal.fire(
+                            'Habilitado!',
+                            'El tour ha sido habilitado.',
+                            'success'
+                        )
+                        element.setAttribute('checked', true);
+                        parent.lastElementChild.innerHTML = '<li style="color:#45b39d">Ok</li>';
+                        parent.style.backgroundColor = '#eafaf1';
+                    })
             }
         });
     } else {
