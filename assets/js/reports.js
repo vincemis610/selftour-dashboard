@@ -12,11 +12,11 @@ const storeData = async () => {
 // funcion que pobla la tabla de tours
 const poblarTablaTours = (data) => {
     let html = '';
-    data.map( tour => { 
+    data.map( (tour, idx) => { 
         html = html + `<tr style="${(tour.status_tour === 1) ?'background-color:#eafaf1': 'background-color:#fbfcfc'}" id="tour-${tour.idtour}">
                 <td style="cursor:pointer; font-weight:bold; font-size: 14px;">
                     <a style="text-decoration:none; color: #3498db" ${(tour.slug != null) ? `href='https://www.selftour.travel/tour/${tour.slug}'` : ''}>
-                        ${ (tour.title.length > 30) ? tour.title.substring(0, 30)+'...' : tour.title }
+                        ${ tour.title }
                     </a>
                 </td>
                 <td>${tour.tourmaker}</td>
@@ -27,12 +27,12 @@ const poblarTablaTours = (data) => {
                 <td style="width:8%;">${ (tour.status_tour === 1) ? `<label class="switch">
                                                         <input type="checkbox" checked disabled data-warnings="${tour.warnings.join('|')}">
                                                         <span class="slider round"></span>
-                                                        <icon class="icon-trash fa fa-trash-o"></icon>
+                                                        <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)'></icon>
                                                     </label>` 
                                                 : `<label class="switch">
                                                         <input type="checkbox" disabled data-warnings="${tour.warnings.join('|')}">
                                                         <span class="slider round"></span>
-                                                        <icon class="icon-trash fa fa-trash-o"></icon>
+                                                        <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)'></icon>
                                                     </label>`}
                 </td>
                 <td>${ tour.warnings.map( w => `<li style="${(w === 'Ok') ? 'color:#45b39d' : 'color:#e74c3c' }">${w}</li>`).join(' ') }</td>
@@ -132,3 +132,26 @@ enableTour = (element) => {
     }
 }
 
+
+const deleteTour = (event) => {
+    let element = event.target.parentNode.parentNode.parentNode;
+    let idTour = element.id.split('-')[1];  
+    Swal.fire({
+        title: 'Eliminar Tour?',
+        text: "El tour ya no se podra recuperar!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Eliminado!',
+            'Removido exitosamente.',
+            'success'
+          );
+          element.remove();
+        }
+      })
+}
