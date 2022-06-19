@@ -13,7 +13,7 @@ const storeData = async () => {
 const poblarTablaTours = (data) => {
     let html = '';
     data.map( (tour, idx) => { 
-        let mailIcon = (tour.warnings.length > 1) ? `<icon class="icon-email fa fa-envelope-o text-danger" onclick='sendEmail(event, ${JSON.stringify(tour)}, ${idx})'></icon>` : "";
+        let mailIcon = (tour.warnings.length > 1) ? `<icon data-toggle="tooltip" data-placement="top" title="Enviar pendientes" class="icon-email fa fa-envelope-o text-danger" onclick='sendEmail(event, ${JSON.stringify(tour)}, ${idx})'></icon>` : "";
         html = html + `<tr style="${(tour.status_tour === 1) ?'background-color:#eafaf1': 'background-color:#fbfcfc'}" id="tour-${tour.idtour}">
                 <td style="cursor:pointer; font-weight:bold; font-size: 14px;">
                     <a style="text-decoration:none; color: #3498db" ${(tour.slug != null) ? `href='https://www.selftour.travel/tour/${tour.slug}'` : ''}>
@@ -21,20 +21,20 @@ const poblarTablaTours = (data) => {
                     </a>
                 </td>
                 <td>${tour.tourmaker}</td>
-                <td style="width:8%;">${(tour.cant_sitios === 0 ) ? '<icon class="fa fa-ban disable"></icon>' : tour.cant_sitios }</td>
-                <td style="width:8%;">${(tour.images === 0) ? '<icon class="fa fa-exclamation-triangle disable"></icon>' : tour.images}</td>
+                <td style="width:8%;">${(tour.cant_sitios === 0 ) ? '<icon class="fa fa-ban disable" data-toggle="tooltip" data-placement="top" title="El tour no contiene sitios"></icon>' : tour.cant_sitios }</td>
+                <td style="width:8%;">${(tour.images === 0) ? '<icon class="fa fa-exclamation-triangle disable" data-toggle="tooltip" data-placement="top" title="El tour no tiene imagenes"></icon>' : tour.images}</td>
                 <td>$ ${tour.price} ${tour.moneda}</td>
                 <td style="width:8%;">${tour.ventas}</td>
                 <td style="width:8%;">${ (tour.status_tour === 1) ? `<label class="switch">
                                                         <input type="checkbox" checked disabled data-warnings="${tour.warnings.join('|')}">
-                                                        <span class="slider round"></span>
-                                                        <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)'></icon>
+                                                        <span class="slider round" data-toggle="tooltip" data-placement="top" title="Deshabilitar tour"></span>
+                                                        <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)' data-toggle="tooltip" data-placement="top" title="Eliminar tour"></icon>
                                                         ${mailIcon}
                                                     </label>` 
                                                 : `<label class="switch">
                                                         <input type="checkbox" disabled data-warnings="${tour.warnings.join('|')}">
-                                                        <span class="slider round"></span>
-                                                        <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)'></icon>
+                                                        <span class="slider round" data-toggle="tooltip" data-placement="top" title="Habilitar tour"></span>
+                                                        <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)' data-toggle="tooltip" data-placement="top" title="Eliminar tour"></icon>
                                                         ${mailIcon}
                                                     </label>`}
                 </td>
