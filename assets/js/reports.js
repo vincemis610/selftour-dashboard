@@ -13,6 +13,7 @@ const storeData = async () => {
 const poblarTablaTours = (data) => {
     let html = '';
     data.map( (tour, idx) => { 
+        let mailIcon = (tour.warnings.length > 1) ? `<icon class="icon-email fa fa-envelope-o text-danger" onclick='sendEmail(event, ${JSON.stringify(tour)}, ${idx})'></icon>` : "";
         html = html + `<tr style="${(tour.status_tour === 1) ?'background-color:#eafaf1': 'background-color:#fbfcfc'}" id="tour-${tour.idtour}">
                 <td style="cursor:pointer; font-weight:bold; font-size: 14px;">
                     <a style="text-decoration:none; color: #3498db" ${(tour.slug != null) ? `href='https://www.selftour.travel/tour/${tour.slug}'` : ''}>
@@ -28,11 +29,13 @@ const poblarTablaTours = (data) => {
                                                         <input type="checkbox" checked disabled data-warnings="${tour.warnings.join('|')}">
                                                         <span class="slider round"></span>
                                                         <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)'></icon>
+                                                        ${mailIcon}
                                                     </label>` 
                                                 : `<label class="switch">
                                                         <input type="checkbox" disabled data-warnings="${tour.warnings.join('|')}">
                                                         <span class="slider round"></span>
                                                         <icon class="icon-trash fa fa-trash-o" onclick='deleteTour(event)'></icon>
+                                                        ${mailIcon}
                                                     </label>`}
                 </td>
                 <td>${ tour.warnings.map( w => `<li style="${(w === 'Ok') ? 'color:#45b39d' : 'color:#e74c3c' }">${w}</li>`).join(' ') }</td>
@@ -152,6 +155,47 @@ const deleteTour = (event) => {
             'success'
           );
           element.remove();
+        }
+      })
+}   
+
+const sendEmail = (event, tour, idx) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const dataTour = JSON.stringify( tour );
+
+    const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: dataTour,
+        redirect: 'follow'
+    };
+
+    Swal.fire({
+        title: 'Enviar pendientes al tourmaker?',
+     
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Enviar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            /* event.target.classList.remove("text-danger");
+            event.target.classList.add("text-primary") */
+            fetch(`${URL}/sendPending`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                
+                event.target.style.display = 'none';
+                Swal.fire(
+                    'Enviado!',
+                    `${result.msg}`,
+                    'success'
+                )
+            })
+            .catch(error => console.log('error', error));
         }
       })
 }
